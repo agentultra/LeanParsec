@@ -1,5 +1,5 @@
 structure Parser (α : Type u) where
-  runParser : ByteArray → OptionM (ByteArray × α)
+  runParser : String → OptionM (String × α)
 
 namespace Parser
 
@@ -12,3 +12,9 @@ instance : Functor Parser where
   map := Parser.map
 
 end Parser
+
+def charP (c : Char) : Parser Char :=
+  Parser.mk $ λ xs =>
+    if String.isPrefixOf (String.mk [c]) xs
+    then Option.some (String.drop xs 1, c)
+    else Option.none
